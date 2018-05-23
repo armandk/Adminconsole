@@ -6,5 +6,5 @@ This is a Spring Boot Web Application creates from a Docker image. The Web App u
 2. Docker file uses a predefined Tomcat version, instead of the Spring Boot Default	
 3. Build the image:  $>  mvn clean install -Dmaven.test.skip=false  docker:build
 4. Run the image as viewing the logs:  $>  docker run -p 8080:8080 --name mywebapp adminconsole
-5. Open your browser at http://IP_ADDRESS:8080/myebapp
+5. Open your browser at http://<YOUR_IP_ADDRESS>:8080/myebapp
 
