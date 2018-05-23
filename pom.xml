@@ -315,11 +315,11 @@
 				<artifactId>docker-maven-plugin</artifactId>
 				<version>0.15.3</version>
 				<configuration>
-				<!--
-					<dockerHost>tcp://10.50.92.61:8080</dockerHost>
+				
+					<dockerHost>tcp://<IP Where Docker engine is running>:2375</dockerHost>
 					
 					<verbose>true</verbose>
-				-->	
+					
 					<images>
 						<image>
 							<name>adminconsole</name>
