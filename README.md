@@ -1,7 +1,7 @@
 # FROM SPRING BOOT WAR TO DOCKER IMAGE
 
 
-This shows a Spring Boot Web Application creates from a Docker image. The Web App uses  Primefaces vs 5.0
+This is a Spring Boot Web Application creates from a Docker image. The Web App uses  Primefaces vs 5.0
 1. The Maven Plugin for Docker used is called  fabric8  (spottify is another one)
 2. Docker file uses a predefined Tomcat version, instead of the Spring Boot Default	
 3. Build the image:  $>  mvn clean install -Dmaven.test.skip=false  docker:build
