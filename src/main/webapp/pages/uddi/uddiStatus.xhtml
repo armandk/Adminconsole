@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/WEB-INF/template.xhtml">
+    <ui:define name="head">
+        <style type="text/css">
+            .ui-row-editor .ui-icon-pencil {
+                margin-left:8px;
+            }
+        </style>
+    </ui:define>
+    
+     <ui:define name="title">
+        UDDI Status - <span class="subitem"> UDDI Status</span>
+    </ui:define>
+    
+    <ui:define name="description">
+        This section will provide latest UDDI update status
+    </ui:define>
+    
+	<ui:define name="implementation">
+		<h:form id="uddiForm">
+		    <h:panelGrid id="statusIndGrid" columns="2" cellpadding="5">
+		    	<p:outputLabel value="Status Indicator" />
+		    	<p:graphicImage value="/resources/images/mono/#{uddiStatusMB.statusIndicator}" />
+	   		</h:panelGrid>
+	    	
+		
+	 	       <p:dataTable id="udditable" var="uddiStatus" value="#{uddiStatusMB.uddiStatusList}" editable="true" editMode="cell" widgetVar="cellUsers"
+	 	       	rows="10" 
+       			paginator="true" 
+       			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+       			rowsPerPageTemplate="5,10,15" >
+			        <p:column headerText="Timestamp">
+			            <h:outputText value="#{uddiStatus.lastFileUpdateTime}" />
+			        </p:column>
+			
+			        <p:column headerText="Updated By">
+						<h:outputText value="#{uddiStatus.updatedBy}" />
+			        </p:column>	 
+		   	   </p:dataTable>
+		   	   <p:remoteCommand autoRun="true" action="#{uddiStatusMB.updateStatusIndicator}"
+                         update="statusIndGrid" name="updateStatusInd"/>
+ 	   </h:form>
+	</ui:define>
+</ui:composition>

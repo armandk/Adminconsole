@@ -1,0 +1,149 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="head">
+        <style type="text/css">
+            .ui-row-editor .ui-icon-pencil {
+                margin-left:8px;
+            }
+        </style>
+    </ui:define>
+    
+    <ui:define name="title">
+        Partner Management - <span class="subitem"> OnBoard/OffBoard</span>
+    </ui:define>
+
+    <ui:define name="description">
+        This section will provide the ability to onBoard or offBoard a partner.
+    </ui:define>
+
+    <ui:define name="implementation">
+
+         <h:form id="form">
+            <p:growl id="msgs" showDetail="true"/>
+            <p:growl id="growl" showDetail="true" sticky="true" /> 
+
+			<span id= "newpartnerspn" class="floatRight">
+            <p:commandButton id="newpartnerBtn" value="OnBoard New Partner" type="button"/>
+            </span>
+          
+			<p:overlayPanel id="newpartnerPanel" for="newpartnerBtn" hideEffect="fade" style="width:800px">
+			
+				
+					<h:panelGrid id="panelGrid1" columns="2" cellpadding="5">
+						  	<p:outputLabel for="partnerName" value="Partner/Facility Name" />
+							<p:inputText id="partnerName"  value ="#{onboardBean.name}" required="true">
+							<f:validateLength minimum="1" maximum="251"/>
+							</p:inputText>
+							
+						  	<p:outputLabel for="partnerNumber" value="Partner/Facility Number" />
+							<p:inputText id="partnerNumber"  value ="#{onboardBean.number}" required="true">
+							<f:validateLength minimum="1" maximum="255"/>
+							</p:inputText>							
+							
+						  	<p:outputLabel for="homeCommId" value="Home Community ID" />
+							<p:inputText id="homeCommId"  value ="#{onboardBean.homeCommId}" required="true">
+							<f:validateLength minimum="1" maximum="255"/>
+							</p:inputText>							
+							
+						  	<p:outputLabel for="fullHomeCommId" value="Full Home Community ID" />
+							<p:inputText id="fullHomeCommId"  value ="#{onboardBean.fullHomeCommId}" required="true">
+							<f:validateLength minimum="1" maximum="255"/>
+							</p:inputText>				
+							
+											
+							<p:outputLabel for="orgDomain" value="ORG_DOMAIN (VAP)" />
+							<p:inputText id="orgDomain"  value ="#{onboardBean.domain}" required="true">
+							</p:inputText>	
+							
+							<p:outputLabel for="orgCommunityIdPrifix" value="ORG_COMMUNITY_ID_PREFIX (VAP)" />
+							<p:inputText id="orgCommunityIdPrifix"  value ="#{onboardBean.communityIdPrifix}" required="true">
+							</p:inputText>	
+							
+							<p:outputLabel for="orgContact" value="ORG_CONTACT (VAP)" />
+							<p:inputText id="orgContact"  value ="#{onboardBean.contact}" required="true">
+							</p:inputText>	
+							
+							<p:outputLabel for="orgPhoneNumber" value="ORG_PHONE_NUMBER (VAP)" />
+							<p:inputText id="orgPhoneNumber"  value ="#{onboardBean.phoneNumber}" required="true">
+							</p:inputText>	
+							
+							<p:outputLabel for="orgActive" value="ACTIVE (VAP) Y/N" />
+							<p:inputText id="orgActive"  value ="#{onboardBean.active}" required="true">
+							<f:validateLength minimum="1" maximum="1"/>
+							</p:inputText>	
+							
+							<p:outputLabel for="orgConsumerOnly" value="ORG_CONSUMER_ONLY (VAP) Y/N" />
+							<p:inputText id="orgConsumerOnly"  value ="#{onboardBean.consumerOnly}" required="true">
+							<f:validateLength minimum="1" maximum="1"/>
+							</p:inputText>																						
+							
+						    <p:commandButton value="Save" actionListener="#{onboardBean.savePartner}" update="growl"/>
+					</h:panelGrid>
+			</p:overlayPanel>          
+         
+            <p:dataTable id="partner" var="partner" value="#{onboardBean.partners}" editable="true" 
+                rows="10" 
+       			paginator="true" 
+       			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+       			rowsPerPageTemplate="5,10,15"
+       			emptyMessage="No parteners found with given criteria"
+       			filteredValue="#{onboardBean.filteredPartners}">
+
+                <p:ajax event="rowEdit" listener="#{onboardBean.onRowEdit}" update=":form:msgs" />
+                <p:ajax event="rowEditCancel" listener="#{onboardBean.onRowCancel}" update=":form:msgs" />
+
+
+                <p:column headerText="Number" sortBy="#{partner.number}" filterBy="#{partner.number}" filterMatchMode="contains">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{partner.number}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{partner.number}" style="width:96%" label="Year"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+                
+                <p:column headerText="Name" sortBy="#{partner.name}" filterBy="#{partner.name}" filterMatchMode="contains">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{partner.name}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{partner.name}" style="width:96%" label="Year"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+                
+                <p:column headerText="HomeCommunityID" sortBy="#{partner.homeCommId}" filterBy="#{partner.homeCommId}" filterMatchMode="contains">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{partner.homeCommId}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{partner.homeCommId}" style="width:96%" label="Year"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="FullHomeCommunityID" sortBy="#{partner.fullHomeCommId}" filterBy="#{partner.fullHomeCommId}" filterMatchMode="contains">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{partner.fullHomeCommId}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{partner.fullHomeCommId}" style="width:96%" label="Year"/></f:facet>
+                    </p:cellEditor>
+                </p:column>                                
+ 
+                <p:column headerText="Status" sortBy="#{partner.onboardStatus}" filterBy="#{partner.onboardStatus}" filterMatchMode="contains">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{partner.onboardStatus}" /></f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{partner.onboardStatus}" style="width:100%">
+                                <f:selectItems value="#{onboardBean.status}" var="status" itemLabel="#{status}" itemValue="#{status}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                
+                <p:column style="width:32px">
+                    <p:rowEditor />
+                </p:column>                
+            </p:dataTable>
+               
+         </h:form>
+        
+    </ui:define>
+
+
+
+</ui:composition>

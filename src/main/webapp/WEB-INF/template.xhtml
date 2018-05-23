@@ -1,0 +1,168 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;">
+    <!ENTITY bull "&#8226;">
+    <!ENTITY copy "&#169;">
+]>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:sec="http://www.springframework.org/security/tags">
+<h:head>
+    <f:facet name="first">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link rel="shortcut icon" type="image/png" href="#{request.contextPath}/resources/main/images/favicon.png" />
+    </f:facet>
+
+    <title>VLER Admin Console</title>
+    <h:outputStylesheet name="css/showcase.css" />
+    <h:outputStylesheet name="css/perfect-scrollbar.css" />
+    <h:outputStylesheet name="css/sh.css" />
+    <!-- <h:outputScript name="js/jquery-plugins.js" /> -->
+    <h:outputScript name="js/perfect-scrollbar.js" />
+    <h:outputScript name="js/showcase.js" />
+    <ui:insert name="head" />
+</h:head>
+
+<h:body>
+
+    <!-- CONTENT STARTS HERE-->
+    <div class="PC">
+        
+	<div id="MENUSIDE">
+    	<div id="MENUSIDEindent">
+            <span id="LOGO" class="bordersOfMenuSide">
+            	<!-- 
+                <h:graphicImage name="main/images/va-image.jpg" />
+                <h:graphicImage styleClass="hiddenIcons" name="main/images/va-image.jpg" />
+                 -->
+                
+                <div id="hiddenLogoTextEl" class="hiddenLogoText">
+                    <span class="dispBlock logoDarkText fontSize30">VLER</span> <span class="dispBlock logoBlueText fontSize30 mediumFont">AdminConsole</span>
+                </div>
+            </span>
+            <span class="emptyBox"></span>
+            <div class="MenuSideMainLink bordersOfMenuSide"><h:graphicImage library="images" name="zoom.svg" class="zoomIcon"/><input id="menuSearch" type="text" placeholder="Search Menu" class="mediumFont fontSize14 mustClose searchInput"/></div>
+            
+            <sec:authorize access="hasRole('PARTNER_MANAGEMENT')">
+	            <span class="MenuSideMainLink bordersOfMenuSide" onclick="Showcase.openSubMenu(this);"><h:graphicImage library="images/mono" name="dialogFramework.svg" /><h:graphicImage library="images/mono" name="dialogFrameworkBlue.svg" /><span class="MainLinkText">Partner Management</span></span>
+	            <div class="SubMenuLinkContainer">
+	            	<!--  <a class="SubMenuLink" href="#{request.contextPath}/ui/adminconsole/onboard.xhtml">&bull; OnBoard/OffBoard</a>-->
+	            	
+	            	<a class="SubMenuLink" href="#{request.contextPath}/pages/partnermanagement/onboard.xhtml">&bull; OnBoard/OffBoard</a>
+	                <a class="SubMenuLink" href="#{request.contextPath}/pages/partnermanagement/outbound.xhtml">&bull; Inbound/Outbound</a>
+	            </div>
+            </sec:authorize>
+            
+			<sec:authorize access="hasRole('PARTNER_MANAGEMENT')">
+				<span class="MenuSideMainLink bordersOfMenuSide" onclick="Showcase.openSubMenu(this);"><h:graphicImage library="images/mono" name="file.svg" /><h:graphicImage library="images/mono" name="fileBlue.svg" /><span class="MainLinkText">File View</span></span>
+            		<div class="SubMenuLinkContainer">
+            	 		<a class="SubMenuLink" href="#{request.contextPath}/pages/ccdafileview/fileViewer.xhtml">&bull; Search </a>
+            		</div> 
+			 </sec:authorize>
+             
+            <sec:authorize access="hasRole('USER_ACCESS_MANAGEMENT')">
+	            <span class="MenuSideMainLink bordersOfMenuSide" onclick="Showcase.openSubMenu(this);"><h:graphicImage library="images/mono" name="ajaxCore.svg" /><h:graphicImage styleClass="hiddenIcons" library="images/mono" name="ajaxCoreBlue.svg" /><span class="MainLinkText">Access Control</span></span>
+	            <div class="SubMenuLinkContainer">
+	            	<a class="SubMenuLink" href="#{request.contextPath}/pages/user/userSummary.xhtml">&bull; User Summary</a>
+	            </div>  
+	        </sec:authorize>    
+	        
+            <span class="MenuSideMainLink bordersOfMenuSide" onclick="Showcase.openSubMenu(this);"><h:graphicImage library="images/mono" name="file.svg" /><h:graphicImage styleClass="hiddenIcons" library="images/mono" name="fileBlue.svg" /><span class="MainLinkText">UDDI</span></span>
+            <div class="SubMenuLinkContainer">
+            	<a class="SubMenuLink" href="#{request.contextPath}/pages/uddi/uddiStatus.xhtml">&bull; UDDI</a>
+            </div>  
+                  
+            <span class="MenuSideMainLink bordersOfMenuSide" onclick="Showcase.openSubMenu(this);"><h:graphicImage library="images/mono" name="logout.png" /><h:graphicImage styleClass="hiddenIcons" library="images/mono" name="logout.png" /><span class="MainLinkText">Logout</span></span>
+            <div class="SubMenuLinkContainer">
+            	<h:outputLink value="#{request.contextPath}/perform_logout">&bull; Logout</h:outputLink>
+             </div>     
+ 
+        </div>
+    </div>
+    
+    <div id="CONTENTSIDE">
+    	<div id="CONTENTSIDEindent">
+            
+        	<!-- header bar start-->
+        	<div class="ContentSideSections" style="height:60px;">
+				<span>
+	                <a id="LOGOTEXTSIDE" href="#{request.contextPath}/index.xhtml">
+	                    <span class="dispBlock logoDarkText fontSize30">eHealth Exchange</span>
+	                    <span class="dispBlock logoBlueText fontSize30 mediumFont">AdminConsole</span>
+	                </a>
+				</span>
+
+				<span class="floatRight fontSize14 gray">
+					Logged user: #{request.userPrincipal.name}
+					<p /> 
+					Role(s): #{request.userPrincipal.authorities}
+				</span>
+            </div>
+            <!-- header bar end-->
+
+            <ui:insert name="content">
+                <div class="ContentSideSections">
+                    <div class="Content100 overHidden TextShadow">
+                        <span class="fontSize30 TextShadow orange mediumFont marginBottom20 dispBlock"><ui:insert name="title" /></span>
+                        <span class="defaultText dispTable"><ui:insert name="description" />
+                        </span>
+                    </div>
+                </div>
+
+                <div class="ContentSideSections Implementation" style="background-color:#dfe4e6;">
+                    <ui:insert name="implementation" />
+                </div>
+
+                <div id="SourceContentSide" class="ContentSideSections Source">
+                    <div class="Content100 overHidden TextShadow">
+                        <span class="defaultText">
+                            <span class="fontSize18 logoBlueText">
+                                <ui:insert name="source" />
+                            </span>
+                        </span>
+                    </div>
+                </div>
+           
+            </ui:insert>
+            
+            <!-- footer start-->
+            <div class="ContentSideSections">
+                <span class="floatLeft fontSize14 gray"><a href="http://www.primetek.com.tr">Veteran Affairs</a>, Copyright &copy; 2014<br />All rights reserved.</span>
+                <span class="floatRight fontSize14 gray">Running on #{build.acenvironment} server. Version #{build.acversion}.</span>
+                <div style="clear:both" />
+            </div>
+            <!-- footer end-->
+            
+        </div>
+    </div>
+    
+    </div>
+    <!--  CONTENT END-->
+    
+     <ui:insert name="status">
+        <p:ajaxStatus style="width:64px;height:64px;position:fixed;right:5px;bottom:5px">
+            <f:facet name="start">
+                <p:graphicImage library="images" name="loader.gif" />
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+    </ui:insert>
+    
+    <ui:insert name="highlight">
+        <script language="javascript" src="#{request.contextPath}/resources/js/sh.js"></script>
+        <script language="javascript">
+            SyntaxHighlighter.all();
+        </script>
+    </ui:insert>
+    
+    <ui:insert name="body"></ui:insert>
+</h:body>
+</html>

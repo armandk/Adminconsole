@@ -1,0 +1,124 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/WEB-INF/template.xhtml">
+    <ui:define name="head">
+        <style type="text/css">
+            .ui-row-editor .ui-icon-pencil {
+                margin-left:8px;
+            }
+        </style>
+    </ui:define>
+    
+     <ui:define name="title">
+        Access Management - <span class="subitem"> Add/Edit User</span>
+    </ui:define>
+    
+    <ui:define name="description">
+        This section will provide the ability to add or edit user
+    </ui:define>
+    
+	<ui:define name="implementation">
+	
+	         <h:form id="userForm">
+            <p:growl id="msgs" severity="info, warn" showDetail="true"/>
+            
+            <p:confirmDialog global="true">
+	       			<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+	       			<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+   			</p:confirmDialog>
+ 
+			<span id= "adduserspn" class="floatRight">
+            	<p:commandButton id="addUserBtn" actionListener="#{userMB.initUser}" immediate="true" ajax="true" 
+            		oncomplete="PF('overlay').loadContents();" value="Add User">
+            		<p:resetInput target="addUserPanel" />
+            	</p:commandButton>
+            </span>
+            
+			<h:outputScript>
+			      function handleSaveRequest(xhr, status, args) {  
+			           if( args.validationFailed ) {
+			           	  PF('overlay').show(); 
+			              return;
+			           }
+			              
+			           PF('overlay').hide();  
+			   }  
+			</h:outputScript>			
+
+			<p:overlayPanel id="addUserPanel" widgetVar="overlay" my="right top" for="addUserBtn" hideEffect="fade" style="width:800px">
+				<h:panelGrid id="panelGrid1" columns="4" cellpadding="5">
+					  	<p:outputLabel for="firstName" value="First Name" />
+						<p:inputText id="firstName" maxlength="25" value ="#{userMB.user.firstName}"
+						required="true" requiredMessage="Please enter first name"/>
+						<p:watermark for="firstName" value="First Name *" />
+						<p:message for="firstName" style="color:red" />
+						
+						<p:outputLabel for="lastName" value="Last Name" />
+						<p:inputText id="lastName" maxlength="25" value ="#{userMB.user.lastName}"
+						required="true" requiredMessage="Please enter last name"/>
+						<p:watermark for="lastName" value="Last Name *" />
+						<p:message for="lastName" style="color:red" />
+						
+					  	<p:outputLabel for="userName" value="UserName" />
+						<p:inputText id="userName" maxlength="15" value ="#{userMB.user.userName}" validatorMessage="Invalid email format"
+							required="true" requiredMessage="Please enter user name" validator="#{userMB.isUserNameExist}"
+							readonly="#{userMB.editMode}">
+							<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+						</p:inputText>
+						<p:watermark for="userName" value="User Name *" />
+						<p:message for="userName" style="color:red" />
+						
+					  	<p:outputLabel for="userPwd" value="Password" />
+						<p:password id="userPwd" maxlength="8" value ="#{userMB.clearTxtPwd}" validatorMessage="Password does not meet criteria"
+							required="true" requiredMessage="Please enter password" redisplay="true"
+							promptLabel="Password must contain following:&#60;br&#62; Must be 8 characters long  &#60;br&#62; Must contain one number
+							  &#60;br&#62; Must contain one uppercase character  &#60;br&#62; Must contain lowercase character  &#60;br&#62;
+							  Must contain one special symbol from the list @#$%!" feedback="true">
+							<!-- <f:validateLength minimum="8" /> -->
+							<f:validateRegex pattern="^((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%!]).{8,75})$" />
+						</p:password>
+						<p:watermark for="userPwd" value="Password *" />
+						<p:message for="userPwd" style="color:red" />
+						
+					  	<p:outputLabel for="roles" value="Roles" />
+						<h:selectManyListbox id="roles" value="#{userMB.selectedRoles}"  required="true" requiredMessage="Please select atleast one role">
+   							<f:selectItems value="#{userMB.selectItems}" />
+						</h:selectManyListbox>		
+						<p:watermark for="roles" value="Roles *" />				
+						<p:message for="roles" style="color:red" />
+												
+					    <p:commandButton value="Save" icon="ui-icon-check" action="#{userMB.saveUser}"  ajax="true" validateClient="true" 
+					    	oncomplete="handleSaveRequest(xhr, status, args)" update="userForm"  />
+				</h:panelGrid>
+			</p:overlayPanel>
+
+	       <p:dataTable id="usertable" var="user" value="#{userSummaryMB.userList}" editable="true" editMode="cell" widgetVar="cellUsers" >
+	            <p:column headerText="User Name">
+		            <h:outputText value="#{user.lastName}, #{user.firstName}" />
+		        </p:column>
+		
+		        <p:column headerText="User Role(s)">
+		        	<ui:repeat var="userRole" varStatus="status" value="#{user.roles}">
+             			<h:outputText value="#{userRole.role.roleName}" />
+             			<h:outputText value=", " rendered="#{!status.last}"/>
+       				</ui:repeat>
+		        </p:column>	 
+		        
+		       <p:column headerText="Action">
+		       	  <p:commandLink id="userEdit" actionListener="#{userMB.loadUser(user.userId)}" value="Edit" 
+		       	  ajax="true" oncomplete="PF('overlay').loadContents();" update="usertable"  process="@this" />
+		       	  <h:outputText value="&#160;&#160;" />
+		       	  <p:commandLink id="userDelete" actionListener="#{userMB.deleteUser(user)}" value="Delete" ajax="true" update="usertable" process="@this">
+		       	  		<p:confirm header="Confirmation" message="Are you sure, you want to delete the user?" icon="ui-icon-alert"/>
+		       	  </p:commandLink>
+		       </p:column>
+	     
+	   	   </p:dataTable>
+ 	   
+   	   </h:form>
+		
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,96 @@
+	<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/WEB-INF/template.xhtml">
+    <ui:define name="head">
+        <style type="text/css">
+            .ui-row-editor .ui-icon-pencil {
+                margin-left:8px;
+            }
+        </style>
+    </ui:define>
+    
+     <ui:define name="title">
+        File Viewer - <span class="subitem"> Search Patient /Download File </span>
+    </ui:define>
+    
+    <ui:define name="description">
+        This section will provide the ability to serach for a Patient and download CCDA File(s).
+    </ui:define>
+    
+	<ui:define name="content">
+	
+	        
+		     <h:panelGrid columns="1" cellpadding="10">
+		     <h:form>
+			     	<p:panel id="panel" header="Please enter you search criteria" style="margin-bottom:10px;width:100%;height:40%">
+				        <h:panelGrid id="panelGrid1" columns="3" cellpadding="5">
+					     	
+					     	
+					     	<p:outputLabel for="patientfn" value="Patient First Name:" />
+					         <p:inputText id="patientfn"  value ="#{fileViewerMB.patientFirstName}"  />
+					           <p:message for="patientfn" display="tooltip" />
+					      	<p:outputLabel for="patientln" value="Patient Last Name" />
+					          <p:inputText id="patientln"  value ="#{fileViewerMB.patientLastName}"  />
+					            <p:message for="patientln" display="tooltip" />
+					        <p:outputLabel for="patientssn" value="Patient SSN" />
+					        <p:inputText  id="patientssn"  value ="#{fileViewerMB.patientSSN}"  />
+					   
+					        <h:commandButton  id="button" value="Search" action="#{fileViewerMB.searchPatient}"  update="panelSearchResult"  />
+					         <p:messages id="msg" showDetail="false" autoUpdate="true" closable="true" />
+				        </h:panelGrid>
+			        </p:panel>
+			
+			         <p:panel id="panelSearchResult" header="Search Results" style="width:100%;margin-bottom:10px;"  rendered ="#{fileViewerMB.shouldRender}" >
+						 <center>
+							Patient Name: <b><h:outputText  value ="#{fileViewerMB.patientLastName}"/>, <h:outputText  value ="#{fileViewerMB.patientFirstName}"/></b> and the  SSN is:  <b><h:outputText  value="#{fileViewerMB.patientSSN}"/></b>
+							<p></p>
+</center>
+        	<center>
+					<p:scrollPanel mode="native" style="width:100%;height:90%">
+						<p:dataTable var="data" value="#{fileViewerMB.searchResultList}" >
+
+						
+								<p:column headerText="Document Id"  style="width: 90px">
+									<h:outputText value="#{data.id}" />
+								</p:column>	
+								<p:column headerText="Creation Date" style="width: 190px">
+									<h:outputText value="#{data.creationTime}" />
+								</p:column>
+								<p:column headerText="File Size"   style="width: 90px">
+									<h:outputText value="#{data.rawDataSize}" />
+								</p:column>
+								<p:column headerText="File Type"  style="width: 190px">
+									<h:outputText value="#{data.formatCodeDisplayName}" />
+								</p:column>
+								
+       
+								<p:column headerText="Last Accessed Date" style="width: 190px">
+									<h:outputText value="#{data.lastAccessedTime}" />
+								</p:column>
+								
+								<p:column headerText="Raw Data" >
+								 <center>
+									  <h:commandButton id="button" value="Download CCDA File" actionListener="#{fileViewerMB.downloadFile}"  rendered="#{data.rawDataSize !=0}">
+									 <f:param name="documentId" value="#{data.id}" />
+							   <p:fileDownload value="#{fileViewerMB.fileToDownload}" /> 
+									 </h:commandButton>
+									</center>
+								</p:column>
+								
+						</p:dataTable>
+					</p:scrollPanel>
+
+				</center>
+			        </p:panel>
+				
+		
+			        </h:form>
+			
+			    </h:panelGrid>
+	</ui:define>
+</ui:composition>

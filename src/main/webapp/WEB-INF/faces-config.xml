@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+              version="2.0">
+
+    <application>
+        <action-listener>org.primefaces.application.DialogActionListener</action-listener>
+        <navigation-handler>org.primefaces.application.DialogNavigationHandler</navigation-handler>
+        <view-handler>org.primefaces.application.DialogViewHandler</view-handler>
+        <navigation-handler>org.primefaces.mobile.application.MobileNavigationHandler</navigation-handler>
+       <!-- <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+		<variable-resolver>org.springframework.web.jsf.DelegatingVariableResolver</variable-resolver> -->
+
+		<locale-config>
+			<default-locale>en</default-locale>
+		</locale-config>
+		<el-resolver>com.sancreton.blogs.projects.adminconsole.common.AdminConsoleSpringBeanFacesELResolver</el-resolver>
+		<resource-bundle>
+			<base-name>messages</base-name>
+			<var>msg</var>
+		</resource-bundle>   
+		<system-event-listener>
+		     <system-event-listener-class>com.sancreton.blogs.projects.adminconsole.common.PostValidationListener</system-event-listener-class>
+		     <system-event-class>javax.faces.event.PostValidateEvent</system-event-class>
+		      <source-class>javax.faces.component.html.HtmlInputText</source-class>
+		</system-event-listener>     
+    </application>
+
+    <converter>
+        <converter-id>theme</converter-id>
+        <converter-class>org.primefaces.showcase.convert.ThemeConverter</converter-class>
+    </converter>
+
+    <factory>
+        <exception-handler-factory>org.primefaces.application.exceptionhandler.PrimeExceptionHandlerFactory</exception-handler-factory>
+    </factory>
+
+    
+    <lifecycle>
+	<phase-listener>com.sancreton.blogs.projects.adminconsole.common.LoginErrorPhaseListener</phase-listener>
+    </lifecycle>    
+
+</faces-config>

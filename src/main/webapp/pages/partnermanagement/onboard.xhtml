@@ -1,0 +1,224 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="head">
+        <style type="text/css">
+            .ui-row-editor .ui-icon-pencil {
+                margin-left:8px;
+            }
+			.ui-growl {   
+			    position:fixed;
+			    top: 30%;
+			    left: 37%;
+			    width: 360px;
+			    height: 110px;
+			    z-index:9999; 
+			}            
+        </style>
+    </ui:define>
+    
+    <ui:define name="title">
+        Partner Management - <span class="subitem"> OnBoard/OffBoard</span>
+    </ui:define>
+
+    <ui:define name="description">
+        This section will provide the ability to onBoard or offBoard a partner.
+    </ui:define>
+
+    <ui:define name="implementation">
+
+         <h:form id="form">
+         	 
+            <p:growl id="msgs" showDetail="true" sticky="true" severity="info,warn"/>
+            <!-- <p:growl id="growl" showDetail="true" sticky="true" severity="info,warn"/> 
+			-->
+			<span id= "newpartnerspn" class="floatRight">
+            <p:commandButton id="newpartnerBtn" value="OnBoard New Partner" type="button"/>
+            </span>
+			<h:outputScript>
+			      function handleSaveRequest(xhr, status, args) {  
+			           if( args.validationFailed ) {
+			           	  PF('newpartnerPanelWidget').show(); 
+			              return;
+			           }
+			              
+			           PF('newpartnerPanelWidget').hide();  
+			   }  
+			</h:outputScript>			
+          
+			<p:overlayPanel id="newpartnerPanel" for="newpartnerBtn" widgetVar="newpartnerPanelWidget" hideEffect="fade" style="width:90%" my="left top" at="left bottom">
+			
+				
+					<h:panelGrid id="panelGrid1" columns="8" cellpadding="5" >
+						  	<p:outputLabel for="partnerName" value="Partner/Facility Name" />
+							<p:inputText id="partnerName"  value ="#{onboardBean.name}" required="true" requiredMessage="Partner/Facility Name is required">
+							<f:validateLength minimum="1" maximum="251"/>
+							</p:inputText>
+							<p:watermark for="partnerName" value="Partner/Facility Name *" />
+							<p:message for="partnerName" style="color:red" />							
+							
+						  	<p:outputLabel for="partnerNumber" value="Partner/Facility Number" />
+							<p:inputText id="partnerNumber"  value ="#{onboardBean.number}" required="true" requiredMessage="Partner/Facility Number is required">
+							<f:validateLength minimum="1" maximum="255"/>
+							</p:inputText>	
+							<p:watermark for="partnerNumber" value="Partner/Facility Number *" />
+							<p:message for="partnerNumber" style="color:red" />							
+													
+							
+						  	<p:outputLabel for="homeCommId" value="Home Community ID" />
+							<p:inputText id="homeCommId"  value ="#{onboardBean.homeCommId}" required="true" requiredMessage="PHome Community ID is required">
+							<f:validateLength minimum="1" maximum="255"/>
+							</p:inputText>	
+							<p:watermark for="homeCommId" value="Home Community ID *" />
+							<p:message for="homeCommId" style="color:red" />														
+							
+						  	<p:outputLabel for="fullHomeCommId" value="Full Home Community ID" />
+							<p:inputText id="fullHomeCommId"  value ="#{onboardBean.fullHomeCommId}" required="true" requiredMessage="Full Home Community ID is required">
+							<f:validateLength minimum="1" maximum="255"/>
+							</p:inputText>	
+							<p:watermark for="fullHomeCommId" value="Full Home Community ID *" />
+							<p:message for="fullHomeCommId" style="color:red" />														
+
+						  	<p:outputLabel for="useSpecVersion" value="Use Spec Version" />
+							<p:inputText id="useSpecVersion"  value ="#{onboardBean.useSpecVersion}" >
+							<f:validateLength maximum="5"/>
+							</p:inputText>	
+							<p:watermark for="useSpecVersion" value="Use Spec Version" />
+							<p:message for="useSpecVersion" style="color:red" />							
+							
+						  	<p:outputLabel for="acpCheck" value="Acp Check" />
+							<p:inputText id="acpCheck"  value ="#{onboardBean.acpCheck}" >
+							<f:validateLength maximum="1"/>
+							</p:inputText>	
+							<p:watermark for="acpCheck" value="Acp Check" />
+							<p:message for="acpCheck" style="color:red" />							
+							
+						  	<p:outputLabel for="prefSpec" value="Pref Spec" />
+							<p:inputText id="prefSpec"  value ="#{onboardBean.prefSpec}" >
+							<f:validateLength maximum="1"/>
+							</p:inputText>	
+							<p:watermark for="prefSpec" value="Pref Spec" />
+							<p:message for="prefSpec" style="color:red" />							
+							
+							<p:outputLabel for="docSpecType" value="Doc Spec Type" />
+							<h:selectOneMenu id="docSpecType" value="#{onboardBean.docSpecId}" >
+								<f:selectItem itemLabel="Select One" itemValue="" />
+								<f:selectItems value="#{onboardBean.docSpecTypesArray}" var="doctype"  itemLabel="#{doctype.docSpecType}" itemValue="#{doctype.docSpecId}"/>
+							</h:selectOneMenu>
+							<p:watermark for="docSpecType" value="Doc Spec Type" />
+							<p:message for="docSpecType" style="color:red" />							 
+							 		
+
+							<p:outputLabel for="orgDomain" value="Facility Domain" />
+							<p:inputText id="orgDomain"  value ="#{onboardBean.domain}" required="true" requiredMessage="Facility Domain is required">
+							</p:inputText>	
+							<p:watermark for="orgDomain" value="Facility Domain *" />
+							<p:message for="orgDomain" style="color:red" />														
+							
+							
+							<p:outputLabel for="orgCommunityIdPrifix" value="Facility Community Id Prefix" />
+							<p:inputText id="orgCommunityIdPrifix"  value ="#{onboardBean.communityIdPrifix}" required="true" requiredMessage="Facility Community Id Prefix is required">
+							</p:inputText>
+							<p:watermark for="orgCommunityIdPrifix" value="Facility Community Id Prefix *" />
+							<p:message for="orgCommunityIdPrifix" style="color:red" />									
+							
+							<p:outputLabel for="orgContact" value="Facility Contact" />
+							<p:inputText id="orgContact"  value ="#{onboardBean.contact}" required="true" requiredMessage="Facility Contact is required">
+							</p:inputText>	
+							<p:watermark for="orgContact" value="Facility Contact *" />
+							<p:message for="orgContact" style="color:red" />								
+							
+							<p:outputLabel for="orgPhoneNumber" value="Facility Phone" />
+							<p:inputText id="orgPhoneNumber"  value ="#{onboardBean.phoneNumber}" required="true" requiredMessage="Facility Phone is required">
+							</p:inputText>	
+							<p:watermark for="orgPhoneNumber" value="Facility Phone *" />
+							<p:message for="orgPhoneNumber" style="color:red" />								
+							
+							<p:outputLabel for="orgConsumerOnly" value="Consumer Only Facility (Y/N)" />
+							<p:inputText id="orgConsumerOnly"  value ="#{onboardBean.consumerOnly}" required="true" requiredMessage="Consumer Only Facility is required">
+								<f:validateLength maximum="1"/>
+								<f:validateRegex pattern="[Y N]" />
+							</p:inputText>	
+							<p:watermark for="orgConsumerOnly" value="Consumer Only Facility *" />
+							<p:message for="orgConsumerOnly" style="color:red" />	
+							
+							
+					</h:panelGrid>
+					<h:panelGrid id="panelGrid2" columns="2" cellpadding="10"   style="margin-left:20%">
+						    <p:commandButton value="Save" action="#{onboardBean.savePartner}" ajax="true" validateClient="true" 
+					    	oncomplete="handleSaveRequest(xhr, status, args)" update="form" />
+					    	
+						    <p:commandButton value="Cancel" immediate="true" onclick="newpartnerPanelWidget.hide()"/>
+					
+					</h:panelGrid>
+					
+			</p:overlayPanel>          
+         
+            <p:dataTable id="partner" var="partner" value="#{onboardBean.partners}" editable="true" 
+                rows="15" 
+       			paginator="true" 
+       			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+       			rowsPerPageTemplate="10,15,20,50,100,500"
+       			emptyMessage="No parteners found with given criteria"
+       			paginatorPosition="bottom"
+       			selectionMode="single" selection="#{onboardBean.selectedPartners}" rowKey="#{partner.id}">
+       			<!-- sortBy="#{partner.id}" sortOrder="descending" -->
+
+                <p:ajax event="rowEdit" listener="#{onboardBean.onRowEdit}" update=":form:msgs" />
+                <p:ajax event="rowEditCancel" listener="#{onboardBean.onRowCancel}" update=":form:msgs" />
+
+
+                <p:column  headerText="Action" style="width:42px">
+                    <p:rowEditor />
+                </p:column> 
+                
+                <p:column headerText="Partner Number" sortBy="#{partner.number}" >
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{partner.number}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{partner.number}" style="width:96%" label="Year"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+                
+                <p:column headerText="Partner Name" sortBy="#{partner.name}" >
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{partner.name}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{partner.name}" style="width:96%" label="Year"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+                
+                <p:column headerText="HomeCommunityID" sortBy="#{partner.homeCommId}" >
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{partner.homeCommId}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{partner.homeCommId}" style="width:96%" label="Year"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="FullHomeCommunityID" sortBy="#{partner.fullHomeCommId}" >
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{partner.fullHomeCommId}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{partner.fullHomeCommId}" style="width:96%" label="Year"/></f:facet>
+                    </p:cellEditor>
+                </p:column>                                
+ 
+                <p:column headerText="Status" sortBy="#{partner.onboardStatus}" >
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{partner.onboardStatus}" /></f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{partner.onboardStatus}" style="width:100%">
+                                <f:selectItems value="#{onboardBean.status}" var="status" itemLabel="#{status}" itemValue="#{status}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                
+            </p:dataTable>
+               
+         </h:form>
+        
+    </ui:define>
+
+
+
+</ui:composition>

@@ -1,0 +1,91 @@
+<beans:beans xmlns:security="http://www.springframework.org/schema/security"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                    http://www.springframework.org/schema/security 
+                    http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+	<security:global-method-security secured-annotations="enabled">
+	</security:global-method-security>
+	
+	<security:http auto-config="true"  use-expressions="true" access-denied-page="/pages/login/accessDenied.xhtml">
+		<security:intercept-url pattern="/pages/login/login**" access="isAnonymous()"  />
+		<security:intercept-url pattern="/pages/login/resetPassword**" access="isAnonymous()"  />
+		<security:intercept-url pattern="/pages/user/userSummary**" access="hasRole('USER_ACCESS_MANAGEMENT')" />
+		<security:intercept-url pattern="/pages/partnermanagement/onboard**" access="hasRole('PARTNER_MANAGEMENT')" />
+		<security:intercept-url pattern="/pages/**" access="isAuthenticated()" />
+
+		<security:form-login login-processing-url="/j_spring_security_check"
+			login-page="/pages/login/login.xhtml" 
+			authentication-success-handler-ref="loginSuccessHandler"
+			authentication-failure-handler-ref="loginFailureHandler"
+			authentication-failure-url="/pages/login/login.xhtml"
+			username-parameter="username"
+			password-parameter="password"
+			/>
+		<security:logout logout-url="/perform_logout" logout-success-url="/pages/login/login.xhtml" delete-cookies="JSESSIONID" />
+	</security:http>
+	
+	<beans:bean id="loginSuccessHandler" class="com.sancreton.blogs.projects.adminconsole.handler.LoginSuccessHandler" />
+	<beans:bean id="loginFailureHandler" class="com.sancreton.blogs.projects.adminconsole.handler.LoginFailureHandler" />
+<!-- 	<beans:bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
+    	<beans:property name="providers">
+	    	<beans:list>
+	      		<beans:ref local="daoAuthenticationProvider" />
+	    	</beans:list>
+  		</beans:property>
+	</beans:bean> -->
+
+<!-- 	<security:authentication-manager>
+		<security:authentication-provider>
+ 			<security:user-service>
+				<security:user name="rod" password="rod"
+					authorities="ROLE_SUPERVISOR, ROLE_USER, ROLE_TELLER" />
+				<security:user name="dianne" password="dianne" authorities="ROLE_USER,ROLE_TELLER" />
+				<security:user name="scott" password="scott" authorities="ROLE_USER" />
+				<security:user name="peter" password="peter" authorities="ROLE_USER" />
+			</security:user-service> 			
+		</security:authentication-provider>
+	</security:authentication-manager> -->
+<!-- 	<http auto-config="true">
+		<intercept-url pattern="/security/login**" access="ROLE_USER" />
+		<intercept-url pattern="/javax.faces.resource/**" access="ROLE_USER" />
+		<form-login 
+		    login-page="/security/login" 
+		    default-target-url="/index" 
+			authentication-failure-url="htt://www.google.com" 
+			username-parameter="username"
+			password-parameter="password" />
+		<logout logout-success-url="/security/login?logout" />
+		enable csrf protection 
+		<csrf/>		
+	</http>
+ 
+	<authentication-manager>
+	  <authentication-provider>
+	    <user-service>
+		<user name="ravik" password="admin" authorities="ROLE_USER" />
+	    </user-service>
+	  </authentication-provider>
+	</authentication-manager> -->
+    
+<!--     <http use-expressions="true">
+    <intercept-url pattern="/secured/**" access="isAuthenticated()" />
+    <form-login login-page="/login.xhtml" authentication-failure-url="/LogFailed.xhtml" default-target-url="/secured/LoggedPage.xhtml"/>
+    
+   </http>
+   
+   <authentication-manager>
+      <authentication-provider user-service-ref="userDetailsService"/>
+   </authentication-manager> -->
+   	<security:authentication-manager>
+  		<security:authentication-provider user-service-ref="userDetailsService">
+    		<security:password-encoder hash="bcrypt"/>
+  		</security:authentication-provider>
+  	</security:authentication-manager>
+<!-- 	<beans:bean id="daoAuthenticationProvider"
+	 class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+	  <beans:property name="userDetailsService" ref="userDetailsService"/>
+	</beans:bean> -->
+</beans:beans> 

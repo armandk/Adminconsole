@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<h:outputStylesheet library="css" name="core.css" />
+</h:head>
+
+<h:body>
+	
+	<h:form id="loginForm" prependId="false">
+		<p:messages id="messages" showDetail="true" showSummary="false" autoUpdate="true" closable="false" />
+		<div id="container">
+			<div id="img-header">
+				<ui:include src="/templates/header.xhtml" />
+			</div>
+			<div id="content-wrapper">
+				<div id="content">
+		
+					<p:panelGrid columns="2">
+						<h:outputLabel for="username" value="Username:" />
+						<p:inputText id="username" required="true" value="#{loginBean.username}" />
+								
+						<h:outputLabel for="password" value="Password:" />
+						<p:password id="password" required="true" value="#{loginBean.password}" />
+		
+						<f:facet name="footer">
+							<p:commandButton type="submit" id="login" ajax="false"
+								actionListener="#{loginBean.doLogin('login')}" value="Login" />
+							<p:commandButton id="reset" type="submit" ajax="false" action="#{loginBean.doLogin('resetPwd')}" value="Reset" />	
+						</f:facet>
+					</p:panelGrid>
+				</div>
+			</div>
+		</div>
+	</h:form>
+</h:body>
+</html>

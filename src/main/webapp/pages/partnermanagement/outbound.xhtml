@@ -1,0 +1,150 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="head">
+        <style type="text/css">
+            .ui-row-editor .ui-icon-pencil {
+                margin-left:8px;
+            }
+			.ui-growl {   
+			    position:fixed;
+			    top: 40%;
+			    left: 37%;
+			    width: 360px;
+			    height: 110px;
+			    z-index:9999; 
+			}            
+        </style>
+    </ui:define>
+    
+    <ui:define name="title">
+        Partner Management - <span class="subitem"> Inbound/Outbound</span>
+    </ui:define>
+
+    <ui:define name="description">
+        This section will provide the ability to control Inbound or Outbound transactions of a partner.
+    </ui:define>
+
+    <ui:define name="implementation">
+
+         <h:form id="form">
+            <p:growl id="msgs" showDetail="true"/>
+
+            
+         
+            <p:dataTable id="partner" var="partner" value="#{outBoundBean.partners}" editable="true" 
+                rows="15" 
+       			paginator="true" 
+       			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+       			rowsPerPageTemplate="10,15,20,50,100,500"
+       			emptyMessage="No parteners found with given criteria"
+       			paginatorPosition="bottom"
+       			selectionMode="single" selection="#{outBoundBean.selectedPartners}" rowKey="#{partner.id}">
+
+                <p:ajax event="rowEdit" listener="#{outBoundBean.onRowEdit}" update=":form:msgs" />
+                <p:ajax event="rowEditCancel" listener="#{outBoundBean.onRowCancel}" update=":form:msgs" />
+				
+		        <p:columnGroup type="header">
+		            <p:row>
+		                <p:column rowspan="2" headerText="Action" style="width:42px" />
+		                <p:column rowspan="2" headerText="Partner Number" sortBy="#{partner.number}"/>
+		                <p:column rowspan="2" headerText="Partner Name" sortBy="#{partner.inboundPD}" />
+		                <p:column colspan="3" headerText="Inbound" style="width:200px" />
+		                <p:column colspan="3" headerText="OutBound" style="width:200px"/>
+		            </p:row>
+		            <p:row>
+		                <p:column headerText="PD" sortBy="#{partner.inboundPD}" />
+		                <p:column headerText="QD" sortBy="#{partner.inboundQD}" />
+		                <p:column headerText="RD" sortBy="#{partner.inboundRD}" />
+		                <p:column headerText="PD" sortBy="#{partner.outboundPD}" />
+		                <p:column headerText="QD" sortBy="#{partner.outboundQD}" />
+		                <p:column headerText="RD" sortBy="#{partner.outboundRD}" />
+		                
+		            </p:row>
+		        </p:columnGroup>				
+                <p:column headerText="Action"> 
+                    <p:rowEditor />
+                </p:column>                
+				
+                <p:column headerText="Partner Number">
+                        <h:outputText value="#{partner.number}" />
+                </p:column>
+                
+                <p:column headerText="Partner Name">
+                        <h:outputText value="#{partner.name}" />
+                </p:column>
+ 				
+                <p:column headerText="Inbound PD" >
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{partner.inboundPD}" /></f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{partner.inboundPD}" style="width:100%">
+                                <f:selectItems value="#{outBoundBean.status}" var="status" itemLabel="#{status}" itemValue="#{status}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Inbound QD" >
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{partner.inboundQD}" /></f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{partner.inboundQD}" style="width:100%">
+                                <f:selectItems value="#{outBoundBean.status}" var="status" itemLabel="#{status}" itemValue="#{status}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Inbound RD" >
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{partner.inboundRD}" /></f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{partner.inboundRD}" style="width:100%">
+                                <f:selectItems value="#{outBoundBean.status}" var="status" itemLabel="#{status}" itemValue="#{status}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                
+                <p:column headerText="Outbound PD" >
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{partner.outboundPD}" /></f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{partner.outboundPD}" style="width:100%">
+                                <f:selectItems value="#{outBoundBean.status}" var="status" itemLabel="#{status}" itemValue="#{status}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Outbound QD" >
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{partner.outboundQD}" /></f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{partner.outboundQD}" style="width:100%">
+                                <f:selectItems value="#{outBoundBean.status}" var="status" itemLabel="#{status}" itemValue="#{status}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Outbound RD" >
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{partner.outboundRD}" /></f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{partner.outboundRD}" style="width:100%">
+                                <f:selectItems value="#{outBoundBean.status}" var="status" itemLabel="#{status}" itemValue="#{status}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>                
+                
+            </p:dataTable>
+               
+         </h:form>
+        
+    </ui:define>
+
+
+
+</ui:composition>
